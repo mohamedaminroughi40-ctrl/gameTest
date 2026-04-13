@@ -4,7 +4,7 @@ using namespace sf;
 void game::initWin()
 {
 	this->win.create(VideoMode(1400, 700), "Game", Style::Close | Style::Resize);
-	this->win.setFramerateLimit(20);
+	this->win.setFramerateLimit(60);
 }
 
 void game::initBackground()
@@ -39,10 +39,14 @@ game::game()
 {
 	this->initWin();
 	this->initBackground();
+	//player
 	this->P.setPosition(100.f, (float)this->win.getSize().y - 280);
 	this->P.setGround((float)this->win.getSize().y - 280);
 	this->P.getSrite().scale(2.f, 2.f);
 
+	//enemy
+	this->E.setposition((float)this->win.getSize().x - 200, (float)this->win.getSize().y - 190);
+	this->E.getSprite().scale(1.5f, 1.5f);
 }
 
 bool game::isRunnig()
@@ -64,6 +68,7 @@ void game::update()
 {
 	this->getEvet();
 	this->P.update();
+	this->E.update(this->P.getPosition().x);
 }
 
 void game::render()
@@ -72,6 +77,7 @@ void game::render()
 	this->win.draw(this->background1);
 	this->win.draw(this->background2);
 	this->win.draw(this->P.getSrite());
+	this->win.draw(this->E.getSprite());
 	this->win.display();
 }
 

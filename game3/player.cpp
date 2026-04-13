@@ -1,4 +1,4 @@
-#include "player.h"
+ #include "player.h"
 
 using namespace sf;
 
@@ -15,17 +15,41 @@ void player::initPlayer()
 	this->playerState = idle;
 	this->playerSprite.setTexture(this->playerIdleTex);
 	//initialse the speed
+	this->currentFrame = 0;
 	this->animationSpeed = 0.1f;
-}
 
-player::player()
-{
-	this->initPlayer();
+	//jump init
 	this->gravity = 0.8f;
 	this->groud = 200.f;
 	this->upSpeed = 0.f;
 	this->isJumping = false;
+
+	//heath init
+	this->hp = this->maxHealth;
+
+	//cooldown attake init
+	this->canAttak = true;
+	this->attakCooldown = 3.f;
+
 }
+
+
+player::player()
+{
+	this->initPlayer();
+	
+}
+
+
+void player::takeDamage(int damage)
+{
+	this->hp -= damage;
+	if (this->hp < 0)
+	{
+		this->hp = 0;
+	}
+}
+
 
 void player::setPosition(float positionX, float positionY)
 {
@@ -39,7 +63,6 @@ void player::setGround(float g)
 }
 
 
-
 void player::updateState()
 {
 	this->playerState = idle;
@@ -48,17 +71,24 @@ void player::updateState()
 	{
 		this->playerState = run;
 		this->maxFrame = 5;
-	} 
+	}
 	if (Keyboard::isKeyPressed(Keyboard::A))
 	{
 		this->playerState = runB;
 		this->maxFrame = 5;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::N))
+	//attake logice
+
+	
+	if (Keyboard::isKeyPressed(Keyboard::N) && this->canAttak)
 	{
 		this->playerState = attak;
 		this->maxFrame = 4;
+		
 	}
+
+
+
 	if (Keyboard::isKeyPressed(Keyboard::W) && !this->isJumping) // not jumping for the case we we click space while jumping 
 	{
 		this->playerState = jump;
@@ -66,28 +96,11 @@ void player::updateState()
 		this->isJumping = true;
 		this->maxFrame = 4;
 	}
-	
 }
-
-void player::updateJump()
-{
-	this->upSpeed += this->gravity;
-	this->playerSprite.move(0, this->upSpeed);
-
-	if (this->playerSprite.getPosition().y >= this->groud )
-	{
-		this->playerSprite.setPosition(this->playerSprite.getPosition().x, this->groud);
-		this->upSpeed = 0;
-		this->isJumping = false;
-	}
-
-}
-
 void player::updatePlayersprite()
 {
 	if (this->playerLastState != this->playerState)
 	{
-		this->currentFrame = 0;
 		switch (this->playerState) {
 		case jump:
 			this->playerSprite.setTexture(this->playerJumpTex);
@@ -109,9 +122,25 @@ void player::updatePlayersprite()
 	}
 }
 
+
+
+void player::updateJump()
+{
+	this->upSpeed += this->gravity;
+	this->playerSprite.move(0, this->upSpeed);
+
+	if (this->playerSprite.getPosition().y >= this->groud )
+	{
+		this->playerSprite.setPosition(this->playerSprite.getPosition().x, this->groud);
+		this->upSpeed = 0;
+		this->isJumping = false;
+	}
+
+}
+
 void player::updatePlayeranimation()
 {
-	if (this->animationClock.getElapsedTime().asSeconds() >= this->animationSpeed  )
+	if (this->animationClock.getElapsedTime().asSeconds() >= this->animationSpeed)
 	{
 		if (this->currentFrame < maxFrame)
 		{
@@ -120,12 +149,35 @@ void player::updatePlayeranimation()
 		else
 		{
 			currentFrame = 0;
+			
 		}
 		this->playerSprite.setTextureRect(IntRect(this->widthFrame * currentFrame, 0, this->widthFrame, this->hightFrame));
 		this->animationClock.restart();
 	}
 
 
+}
+
+FloatRect player::getHitBox()
+{
+	if (this->playerState == attak)
+	{
+		return FloatRect(
+			(float)this->playerSprite.getPosition().x + 80.f,//position infront of the player
+			(float)this->playerSprite.getPosition().y, //the ground as the player 
+			60.f, 40.f);
+	}
+	return FloatRect(0, 0, 0, 0); // no attak
+}
+
+
+Sprite& player::getSrite(){
+	return this->playerSprite;
+}
+
+Vector2f player::getPosition()
+{
+	return this->playerSprite.getPosition();
 }
 
 void player::update()
@@ -143,9 +195,3 @@ void player::update()
 	this->updatePlayersprite();
 	this->updatePlayeranimation();
 }
-
-Sprite& player::getSrite(){
-	return this->playerSprite;
-}
-
-

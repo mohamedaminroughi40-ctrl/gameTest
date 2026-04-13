@@ -2,6 +2,7 @@
 #define GAME_H
 
 #include"player.h"
+#include"enemie.h"
 #include<SFML/Graphics.hpp>
 #include<SFML/System.hpp>
 #include<SFML/Window.hpp>
@@ -26,6 +27,7 @@ private:
 		void initBackground();
 	//game objects 
 		player P;
+		enemie E;
 
 
 public:

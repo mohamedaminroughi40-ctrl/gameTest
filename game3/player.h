@@ -22,6 +22,7 @@ enum state
 
 class player
 {
+	Event ev;
 	
 	//texturs and sprite
 		Texture playerIdleTex;
@@ -35,6 +36,7 @@ class player
 		state playerLastState;
 		void initPlayer();
 
+
 	//jump logic
 		bool isJumping;
 		float gravity;
@@ -42,7 +44,7 @@ class player
 		float groud;
 
 	//animation logic
-		int currentFrame=0;
+		int currentFrame;
 		int maxFrame;
 		float widthFrame = 160.f;
 		float hightFrame = 90.f;
@@ -50,10 +52,22 @@ class player
 		Clock animationClock;
 		float animationSpeed;
 
+		//hit box
+		FloatRect hitBox;
+		FloatRect getHitBox();
 
+	//health sys
+		int maxHealth;
+		int hp;
+		void takeDamage(int damage);
+	//couldown attak
+		Clock cooldown;
+		float attakCooldown;
+		bool canAttak;
 
 public:
 	player();
+
 	void setPosition(float positionX , float positionY);
 	void setGround(float g);
 
@@ -68,6 +82,8 @@ public:
 	void update();
 
 	Sprite& getSrite() ;
+
+	Vector2f getPosition();
 
 
 };
