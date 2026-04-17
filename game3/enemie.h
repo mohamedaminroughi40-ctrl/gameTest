@@ -4,6 +4,7 @@
 #define ENEMIE_H
 
 #include <math.h>
+
 #include<SFML/Graphics.hpp>
 #include<SFML/System.hpp>
 #include<SFML/Window.hpp>
@@ -13,7 +14,7 @@ using namespace sf;
 
 enum stateMov
 {
-	Eidle,Echase
+	Eidle,Echase,EshaseB
 };
 
 class enemie
@@ -23,9 +24,14 @@ class enemie
 		Texture idleTex;
 		Texture apearTex;
 		Texture chaseTex;
+		Texture chaseBTex;
 		Texture vanishTex;
 		Sprite enemieSprite;
 		void initEnemie();
+
+		//heath sys
+		int hp;
+		int maxHp;
 
 		//animation logic
 		int currentFrame;
@@ -44,11 +50,12 @@ class enemie
 		void stateHundling(float playerPosX);
 		void movUp(float playerPosX);
 		void spriteUp();
-
-
 		void update(float playerPosX);
 
+		void takeDamage(int damage);
+
 		Sprite getSprite();
+		int getHeah();
 
 		
 };

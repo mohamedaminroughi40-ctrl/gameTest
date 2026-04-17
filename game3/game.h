@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+
+#include<iostream>
 #include"player.h"
 #include"enemie.h"
 #include<SFML/Graphics.hpp>
@@ -25,6 +27,7 @@ private:
 		Sprite background1;
 		Sprite background2;
 		void initBackground();
+
 	//game objects 
 		player P;
 		enemie E;
@@ -32,6 +35,7 @@ private:
 
 public:
 	game();
+	void checkPattack();
 	bool isRunnig();
 	void getEvet();
 

@@ -1,5 +1,6 @@
 
-#ifndef PLAYER_H
+#ifndef  PLAYER_H
+
 #define PLAYER_H
 
 
@@ -34,6 +35,7 @@ class player
 		Sprite playerSprite;
 		state playerState;
 		state playerLastState;
+		bool stateChanged;
 		void initPlayer();
 
 
@@ -42,6 +44,8 @@ class player
 		float gravity;
 		float upSpeed;
 		float groud;
+		Clock jumpTimer;
+		float jumpFps;
 
 	//animation logic
 		int currentFrame;
@@ -54,12 +58,12 @@ class player
 
 		//hit box
 		FloatRect hitBox;
-		FloatRect getHitBox();
+		
 
 	//health sys
 		int maxHealth;
 		int hp;
-		void takeDamage(int damage);
+
 	//couldown attak
 		Clock cooldown;
 		float attakCooldown;
@@ -70,7 +74,9 @@ public:
 
 	void setPosition(float positionX , float positionY);
 	void setGround(float g);
-
+	void takeDamage(int damage);
+	
+	
 	void updateState();
 
 	void updateJump();
@@ -81,9 +87,12 @@ public:
 
 	void update();
 
-	Sprite& getSrite() ;
 
+	Sprite& getSrite() ;
+	FloatRect getHitBox();
 	Vector2f getPosition();
+	bool isAttaking();
+	bool isMoving();
 
 
 };

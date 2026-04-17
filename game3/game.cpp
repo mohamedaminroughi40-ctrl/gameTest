@@ -49,6 +49,15 @@ game::game()
 	this->E.getSprite().scale(1.5f, 1.5f);
 }
 
+void game::checkPattack()
+{
+	if (this->P.getHitBox().intersects( this->E.getSprite().getGlobalBounds() )  )//does not work
+	{
+		std::cout << "the player attake";
+		this->P.takeDamage(10);
+	}
+}
+
 bool game::isRunnig()
 {
 	return this->win.isOpen();
@@ -67,6 +76,7 @@ void game::getEvet()
 void game::update()
 {
 	this->getEvet();
+	this->checkPattack();
 	this->P.update();
 	this->E.update(this->P.getPosition().x);
 }

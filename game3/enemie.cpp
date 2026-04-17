@@ -4,11 +4,16 @@ void enemie::initEnemie()
 {
 	this->idleTex.loadFromFile("assets/gost/Idle.png");
 	this->chaseTex.loadFromFile("assets/gost/Chase.png");
+	this->chaseBTex.loadFromFile("assets/gost/ChaseB.png");
 	this->apearTex.loadFromFile("assets/gost/Appear.png");
 	this->vanishTex.loadFromFile("assets/gost/Vanish.png");
+
+	//heath init
+	this->maxHp = 20;
+	this->hp = maxHp;
 }
 
-enemie::enemie()
+enemie::enemie() 
 {
 	this->initEnemie();
 	this->enemieSprite.setTexture(this->idleTex);
@@ -42,17 +47,35 @@ void enemie::animation()
 void enemie::stateHundling(float playerPosX)
 {
 	float distance = abs(playerPosX - this->enemieSprite.getPosition().x);
-	if (distance > 700) this->state = Eidle;
-	else this->state = Echase;
+	if (distance < 700) {
+		if (distance < 100)
+		{
+			this->state = Eidle;
+		}
+		else if (playerPosX < this->enemieSprite.getPosition().x)
+		{
+			this->state = Echase;
+		}
+		else
+		{
+			this->state = EshaseB;
+		}
+	}
+
+	else this->state = Eidle;
 }
 
 void enemie::movUp(float playerPosX)
 {
 	if (this->state == Echase)
 	{
-		if (playerPosX < this->enemieSprite.getPosition().x) this->enemieSprite.move(-1.f, 0.f);
-		else this->enemieSprite.move(1.f, 0.f);
+		 this->enemieSprite.move(-2.f, 0.f);
 	}
+	else if(this->state == EshaseB )
+	{
+		this->enemieSprite.move(2.f, 0.f);
+	}
+	
 	
 }
 
@@ -68,15 +91,13 @@ void enemie::spriteUp()
 		this->maxFrame = 3;
 		this->enemieSprite.setTexture(this->chaseTex);
 		break;
+	case EshaseB:
+		this->maxFrame = 3;
+		this->enemieSprite.setTexture(this->chaseBTex);
+		break;
 
 	}
 }
-
-
-
-
-
-
 
 
 void enemie::update(float playerPosX)
@@ -87,14 +108,23 @@ void enemie::update(float playerPosX)
 	this->animation();
 }
 
+void enemie::takeDamage(int damage)
+{
+	this->hp -= damage;
+	if (this->hp < 0)
+	{
+		this->hp = 0;
+	}
+}
+
 Sprite enemie::getSprite()
 {
 	return this->enemieSprite;
 }
 
-
-
-
-
+int enemie::getHeah()
+{
+	return this->hp;
+}
 
 
