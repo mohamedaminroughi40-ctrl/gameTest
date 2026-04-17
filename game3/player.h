@@ -68,6 +68,7 @@ class player
 		Clock cooldown;
 		float attakCooldown;
 		bool canAttak;
+	
 
 public:
 	player();
@@ -93,7 +94,7 @@ public:
 	Vector2f getPosition();
 	bool isAttaking();
 	bool isMoving();
-
+	bool isAttakFrame();
 
 };
 

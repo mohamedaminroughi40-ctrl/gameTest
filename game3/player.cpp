@@ -39,6 +39,15 @@ void player::initPlayer()
 }
 
 
+bool player::isAttakFrame()
+{
+	if (this->isAttaking() && this->currentFrame == 2)
+	{
+		return true;
+	}
+	return false;
+}
+
 player::player()
 {
 	this->initPlayer();
@@ -184,8 +193,8 @@ FloatRect player::getHitBox()
 	if (this->playerState == attak)
 	{
 		return FloatRect(
-			(float)this->playerSprite.getPosition().x + 80.f,//position infront of the player
-			(float)this->playerSprite.getPosition().y, //the ground as the player 
+			(float)this->playerSprite.getPosition().x + 200.f,//position infront of the player
+			(float)this->playerSprite.getPosition().y + 100, //the ground as the player 
 			60.f, 40.f);
 	}
 	return FloatRect(0, 0, 0, 0); // no attak
