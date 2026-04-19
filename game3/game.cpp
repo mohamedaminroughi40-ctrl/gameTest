@@ -52,17 +52,18 @@ game::game()
 
 void game::checkPattack()
 {
-	if (this->P.getHitBox().intersects( this->E.getSprite().getGlobalBounds() )  )//does not work
-	{
-		
-		if ( this->P.isAttakFrame() )
+	FloatRect playerHitBox = this->P.getHitBox();
+	
+		if (playerHitBox.intersects(this->E.getSprite().getGlobalBounds()))
 		{
-			this->E.takeDamage(10);
-			std::cout << "the player attake\n";
-			std::cout << "the enemy heath is " << this->E.getHeah() << std::endl;
+			if (this->P.isAttakFrame() && !this->P.getAttakeDealt())
+			{
+				this->E.takeDamage(10);
+				this->P.setAttakeDealt(true);
+				std::cout << "the player attake\n";
+				std::cout << "the enemy heath is " << this->E.getHeah() << std::endl;
+			}
 		}
-		
-	}
 }
 
 bool game::isRunnig()
@@ -96,28 +97,28 @@ void game::render()
 	this->win.draw(this->P.getSrite());
   //   Draw player's hit box for debugging.
 	 //If the hit box is empty (width/height == 0) draw the sprite bounds instead.
-	FloatRect hb = this->P.getHitBox();
-	if (hb.width > 0.f && hb.height > 0.f)
-	{
-		RectangleShape box;
-		box.setPosition(hb.left, hb.top);
-		box.setSize(Vector2f(hb.width, hb.height));
-		box.setFillColor(Color::Transparent);
-		box.setOutlineColor(Color::Red);
-		box.setOutlineThickness(1.f);
-		this->win.draw(box);
-	}
-	else
-	{
-		FloatRect gb = this->P.getSrite().getGlobalBounds();
-		RectangleShape box;
-		box.setPosition(gb.left, gb.top);
-		box.setSize(Vector2f(gb.width, gb.height));
-		box.setFillColor(Color::Transparent);
-		box.setOutlineColor(Color::Green);
-		box.setOutlineThickness(1.f);
-		this->win.draw(box);
-	}
+	//FloatRect hb = this->P.getHitBox();
+	//if (hb.width > 0.f && hb.height > 0.f)
+	//{
+	//	RectangleShape box;
+	//	box.setPosition(hb.left, hb.top);
+	//	box.setSize(Vector2f(hb.width, hb.height));
+	//	box.setFillColor(Color::Transparent);
+	//	box.setOutlineColor(Color::Red);
+	//	box.setOutlineThickness(1.f);
+	//	this->win.draw(box);
+	//}
+	//else
+	//{
+	//	FloatRect gb = this->P.getSrite().getGlobalBounds();
+	//	RectangleShape box;
+	//	box.setPosition(gb.left, gb.top);
+	//	box.setSize(Vector2f(gb.width, gb.height));
+	//	box.setFillColor(Color::Transparent);
+	//	box.setOutlineColor(Color::Green);
+	//	box.setOutlineThickness(1.f);
+	//	this->win.draw(box);
+	//}
 
 	this->win.draw(this->E.getSprite());
 	this->win.display();

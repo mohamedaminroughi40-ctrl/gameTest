@@ -14,7 +14,7 @@ using namespace sf;
 
 enum stateMov
 {
-	Eidle,Echase,EshaseB
+	Eidle,Echase,EshaseB,dead
 };
 
 class enemie

@@ -1,4 +1,3 @@
-
 #ifndef  PLAYER_H
 
 #define PLAYER_H
@@ -64,11 +63,11 @@ class player
 		int maxHealth;
 		int hp;
 
-	//couldown attak
+	//logic attak
 		Clock cooldown;
 		float attakCooldown;
 		bool canAttak;
-	
+		bool attakeDealt;  // Add here in private section
 
 public:
 	player();
@@ -95,7 +94,8 @@ public:
 	bool isAttaking();
 	bool isMoving();
 	bool isAttakFrame();
-
+	bool getAttakeDealt() const { return this->attakeDealt; }  // Add getter instead
+	void setAttakeDealt(bool dealt) { this->attakeDealt = dealt; }  // Add setter
 };
 
 

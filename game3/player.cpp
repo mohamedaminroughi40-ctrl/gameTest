@@ -1,4 +1,4 @@
- #include "player.h"
+#include "player.h"
 
 using namespace sf;
 
@@ -32,7 +32,7 @@ void player::initPlayer()
 
 	//cooldown attake init
 	this->canAttak = true;
-	this->attakCooldown = 3.f;
+	this->attakCooldown = 1.f;
 
 	
 
@@ -41,8 +41,9 @@ void player::initPlayer()
 
 bool player::isAttakFrame()
 {
-	if (this->isAttaking() && this->currentFrame == 2)
+	if (this->isAttaking() && this->currentFrame == 2 )
 	{
+		
 		return true;
 	}
 	return false;
@@ -95,13 +96,13 @@ void player::updateState()
 	//attake logice
 
 	
-	 if (Keyboard::isKeyPressed(Keyboard::N) && this->canAttak)
+	 if (Keyboard::isKeyPressed(Keyboard::N) && this->canAttak )
 	{
 		this->playerState = attak;
 		this->maxFrame = 4;
-		
+		// Only reset flag when FIRST entering attack state
 	}
-	 if (Keyboard::isKeyPressed(Keyboard::W) && !this->isJumping) // not jumping for the case we we click space while jumping 
+	 if (Keyboard::isKeyPressed(Keyboard::W) && !this->isJumping)
 	{
 		this->playerState = jump;
 		this->upSpeed = -10.f;
@@ -109,10 +110,9 @@ void player::updateState()
 		this->maxFrame = 3;
 	}
 }
+
 void player::updatePlayersprite()
 {
-    // Prefer the jump texture when the player is in the air so the
-	// sprite keeps the jump animation while falling even if no key is pressed.
 	state displayState = this->playerState;
 	if (this->isJumping)
 	{
@@ -140,14 +140,13 @@ void player::updatePlayersprite()
 			break;
 		case attak:
 			this->playerSprite.setTexture(this->playerAttakTex);
+			this->attakeDealt = false;  // Reset flag HERE when state changes
 			break;
 		}
 		this->playerLastState = displayState;
 		this->currentFrame = 0;
 	}
 }
-
-
 
 void player::updateJump()
 {
@@ -227,7 +226,8 @@ bool player::isMoving()
 
 void player::update()
 {
-	this->updateState();
+	this->updateState();	
+
 	if (this->playerState == run)
 	{
 		this->playerSprite.move(5.f, 0);
@@ -240,4 +240,7 @@ void player::update()
 	this->updatePlayersprite();
 	this->updatePlayeranimation();
 }
+
+
+
 

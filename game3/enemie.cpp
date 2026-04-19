@@ -29,6 +29,11 @@ void enemie::setposition(float posX, float poseY)
 
 void enemie::animation()
 {
+	if (this->state == dead && this->currentFrame == 3)
+	{
+		this->currentFrame = 3;
+		return;
+	}
 	if ( this->animationTimer.getElapsedTime().asSeconds() >= this->animationTimeLimit )
 	{
 		if (this->currentFrame < this->maxFrame)
@@ -46,6 +51,11 @@ void enemie::animation()
 
 void enemie::stateHundling(float playerPosX)
 {
+	if (this->hp <= 0 )
+	{
+		this->state = dead;
+		return;
+	}
 	float distance = abs(playerPosX - this->enemieSprite.getPosition().x);
 	if (distance < 700) {
 		if (distance < 100)
@@ -95,7 +105,10 @@ void enemie::spriteUp()
 		this->maxFrame = 3;
 		this->enemieSprite.setTexture(this->chaseBTex);
 		break;
-
+	case dead:
+		this->maxFrame = 3;
+		this->enemieSprite.setTexture(this->vanishTex);
+		break;
 	}
 }
 
