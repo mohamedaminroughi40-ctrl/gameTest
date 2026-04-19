@@ -13,8 +13,8 @@ using namespace sf;
 
 
 enum stateMov
-{
-	Eidle,Echase,EshaseB,dead
+{ 
+	Eidle,Echase,EshaseB,dead,attack
 };
 
 class enemie
@@ -26,12 +26,14 @@ class enemie
 		Texture chaseTex;
 		Texture chaseBTex;
 		Texture vanishTex;
+		Texture attackTex;
 		Sprite enemieSprite;
 		void initEnemie();
 
 		//heath sys
 		int hp;
 		int maxHp;
+		float speed;
 
 		//animation logic
 		int currentFrame;

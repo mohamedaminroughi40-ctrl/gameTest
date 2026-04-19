@@ -3,6 +3,7 @@
 
 
 #include<iostream>
+#include <vector>
 #include"player.h"
 #include"enemie.h"
 #include<SFML/Graphics.hpp>
@@ -30,7 +31,8 @@ private:
 
 	//game objects 
 		player P;
-		enemie E;
+		std::vector<enemie> enemies;
+		void initEnemies();
 
 
 public:

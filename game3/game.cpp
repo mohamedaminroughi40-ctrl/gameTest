@@ -35,6 +35,19 @@ void game::initBackground()
 
 
 
+void game::initEnemies()
+{
+	enemie e1;
+	e1.setposition((float)this->win.getSize().x - 600, (float)this->win.getSize().y - 190);
+	e1.getSprite().scale(1.5f, 1.5f);
+	this->enemies.push_back(e1);
+
+	enemie e2;
+	e2.setposition((float)this->win.getSize().x - 100, (float)this->win.getSize().y - 190);
+	e2.getSprite().scale(1.5f, 1.5f);
+	this->enemies.push_back(e2);
+}
+
 game::game()
 {
 	this->initWin();
@@ -44,26 +57,26 @@ game::game()
 	this->P.setGround((float)this->win.getSize().y - 280);
 	this->P.getSrite().scale(2.f, 2.f);
 	FloatRect a = this->P.getHitBox();
-
-	//enemy
-	this->E.setposition((float)this->win.getSize().x - 200, (float)this->win.getSize().y - 190);
-	this->E.getSprite().scale(1.5f, 1.5f);
+	this->initEnemies();
 }
 
 void game::checkPattack()
 {
 	FloatRect playerHitBox = this->P.getHitBox();
-	
-		if (playerHitBox.intersects(this->E.getSprite().getGlobalBounds()))
+	for (int i = 0; i < this->enemies.size(); i++)
+	{
+		if (playerHitBox.intersects(this->enemies[i].getSprite().getGlobalBounds()))
 		{
 			if (this->P.isAttakFrame() && !this->P.getAttakeDealt())
 			{
-				this->E.takeDamage(10);
+				this->enemies[i].takeDamage(10);
 				this->P.setAttakeDealt(true);
-				std::cout << "the player attake\n";
-				std::cout << "the enemy heath is " << this->E.getHeah() << std::endl;
+				std::cout << "the player attake \n";
+				std::cout << "the enemy " <<i <<" heath is " << this->enemies[i].getHeah() << std::endl;
 			}
 		}
+	}
+		
 }
 
 bool game::isRunnig()
@@ -86,7 +99,10 @@ void game::update()
 	this->getEvet();
 	this->checkPattack();
 	this->P.update();
-	this->E.update(this->P.getPosition().x);
+	for (int i = 0; i < this->enemies.size(); i++)
+	{
+		this->enemies[i].update(this->P.getPosition().x);
+	}
 }
 
 void game::render()
@@ -119,8 +135,11 @@ void game::render()
 	//	box.setOutlineThickness(1.f);
 	//	this->win.draw(box);
 	//}
-
-	this->win.draw(this->E.getSprite());
+	for (int i = 0; i < this->enemies.size(); i++)
+	{
+		this->win.draw(this->enemies[i].getSprite());
+	}
+	
 	this->win.display();
 }
 
