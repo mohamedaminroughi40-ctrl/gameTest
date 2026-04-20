@@ -146,6 +146,10 @@ void enemie::update(float playerPosX)
 	{
 		this->currentFrame = 0;
 		this->animationTimer.restart();
+		if (this->state == attack)
+		{
+			this->attackDealt = false;
+		}
 	}
 	
 	this->movUp(playerPosX);
@@ -174,6 +178,25 @@ void enemie::updateHitEffect()
 bool enemie::isAttaking()
 {
 	if (this->state == attack)
+	{
+		return true;
+	}
+	return false;
+}
+
+bool enemie::getAttackDealt()
+{
+	return this->attackDealt;
+}
+
+void enemie::setAttackDealt(bool dealt)
+{
+	this->attackDealt = dealt;
+}
+
+bool enemie::getAttackFarme()
+{
+	if (this->currentFrame == 2)
 	{
 		return true;
 	}

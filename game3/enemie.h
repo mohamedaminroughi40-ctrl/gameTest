@@ -44,9 +44,10 @@ class enemie
 			float animationTimeLimit;
 			
 		// hit / death effect
-		Clock hitTimer;
-		float hitFlashDuration = 0.18f;
-		bool isHit = false;
+			bool attackDealt;
+			Clock hitTimer;
+			float hitFlashDuration = 0.18f;
+			bool isHit = false;
 
 	public:
 		enemie();
@@ -67,6 +68,9 @@ class enemie
 		// hit effect
 		void updateHitEffect();
 		bool isAttaking();
+		bool getAttackDealt();
+		void setAttackDealt(bool dealt);
+		bool getAttackFarme();
 };
 
 #endif 

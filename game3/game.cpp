@@ -90,8 +90,9 @@ void game::checkEAttack()
 
 		if (enemieHitBox.intersects(this->P.getSrite().getGlobalBounds()) )  
 		{
-			if (this->enemies[i].isAttaking())
+			if (this->enemies[i].isAttaking() && !this->enemies[i].getAttackDealt() && this->enemies[i].getAttackFarme() )
 			{
+				this->enemies[i].setAttackDealt(true);
 				this->P.takeDamage(10);
 				std::cout << "the player got damaged";
 			}
@@ -140,7 +141,7 @@ void game::render()
 	this->win.clear();
 	this->win.draw(this->background1);
 	this->win.draw(this->background2);
-	this->win.draw(this->P.getSrite());
+	
   //   Draw player's hit box for debugging.
 	 //If the hit box is empty (width/height == 0) draw the sprite bounds instead.
 	//FloatRect hb = this->P.getHitBox();
@@ -169,6 +170,7 @@ void game::render()
 	{
 		this->win.draw(this->enemies[i].getSprite());
 	}
+	this->win.draw(this->P.getSrite());
 	
 	this->win.display();
 }
