@@ -1,5 +1,3 @@
-
-
 #ifndef ENEMIE_H
 #define ENEMIE_H
 
@@ -34,6 +32,7 @@ class enemie
 		int hp;
 		int maxHp;
 		float speed;
+		bool deathE;
 
 		//animation logic
 		int currentFrame;
@@ -43,7 +42,11 @@ class enemie
 			//animation timer
 			Clock animationTimer;
 			float animationTimeLimit;
-		
+			
+		// hit / death effect
+		Clock hitTimer;
+		float hitFlashDuration = 0.18f;
+		bool isHit = false;
 
 	public:
 		enemie();
@@ -56,12 +59,14 @@ class enemie
 
 		void takeDamage(int damage);
 
-		Sprite getSprite();
+		Sprite& getSprite();
 		int getHeah();
+		FloatRect getHitBox();
+		bool death();
 
-		
+		// hit effect
+		void updateHitEffect();
+		bool isAttaking();
 };
-
-
 
 #endif 

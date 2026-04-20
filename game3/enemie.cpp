@@ -12,6 +12,7 @@ void enemie::initEnemie()
 	//heath init
 	this->maxHp = 20;
 	this->hp = maxHp;
+	this->deathE = false;
 
 	this->speed = 2.f;
 }
@@ -35,6 +36,7 @@ void enemie::animation()
 	if (this->state == dead && this->currentFrame == 3)
 	{
 		this->currentFrame = 3;
+		this->deathE = true;
 		return;
 	}
 	if ( this->animationTimer.getElapsedTime().asSeconds() >= this->animationTimeLimit )
@@ -85,7 +87,7 @@ void enemie::stateHundling(float playerPosX)
 void enemie::movUp(float playerPosX)
 {
 	float distance = abs(playerPosX - this->enemieSprite.getPosition().x);
-	float stopDistance = 20;  // Stop at this distance from player
+	float stopDistance = 20 ;  // Stop at this distance from player
 	
 	if (this->state == Echase && distance > stopDistance)
 	{
@@ -108,22 +110,27 @@ void enemie::spriteUp()
 	case Eidle:
 		this->maxFrame = 6;
 		this->enemieSprite.setTexture(this->idleTex);
+		this->animationTimeLimit = 0.45f;
 		break;
 	case Echase:
 		this->maxFrame = 3;
 		this->enemieSprite.setTexture(this->chaseTex);
+		this->animationTimeLimit = 0.15f;
 		break;
 	case EshaseB:
 		this->maxFrame = 3;
 		this->enemieSprite.setTexture(this->chaseBTex);
+		this->animationTimeLimit = 0.15f;
 		break;
 	case dead:
 		this->maxFrame = 3;
 		this->enemieSprite.setTexture(this->vanishTex);
+		this->animationTimeLimit = 0.25f;
 		break;
 	case attack:
 		this->maxFrame = 3;
 		this->enemieSprite.setTexture(this->attackTex);
+		this->animationTimeLimit = 0.18f;
 		break;
 	}
 }
@@ -144,7 +151,36 @@ void enemie::update(float playerPosX)
 	this->movUp(playerPosX);
 	this->spriteUp();
 	this->animation();
+	this->updateHitEffect(); // handle flash and color reset
 }
+
+void enemie::updateHitEffect()
+{
+	if (!this->isHit) return;
+
+	if (this->hitTimer.getElapsedTime().asSeconds() >= this->hitFlashDuration)
+	{
+		// end flash
+		this->enemieSprite.setColor(Color::White);
+		this->isHit = false;
+	}
+	else
+	{
+		// flash red while within duration
+		this->enemieSprite.setColor(Color::Red);
+	}
+}
+
+bool enemie::isAttaking()
+{
+	if (this->state == attack)
+	{
+		return true;
+	}
+	return false;
+}
+
+
 
 void enemie::takeDamage(int damage)
 {
@@ -153,11 +189,35 @@ void enemie::takeDamage(int damage)
 	{
 		this->hp = 0;
 	}
+
+	// Trigger hit flash
+	this->isHit = true;
+	this->hitTimer.restart();
+
+	// If died, make sure death state and reset animation so vanish plays
+	if (this->hp <= 0)
+	{
+		this->state = dead;
+		this->currentFrame = 0;
+		this->animationTimer.restart();
+	}
 }
 
-Sprite enemie::getSprite()
+Sprite& enemie::getSprite()
 {
 	return this->enemieSprite;
+}
+
+FloatRect enemie::getHitBox()
+{
+	// When attacking, use the enemy sprite bounds as hit area.
+	// You can adjust the returned rect to be offset in front of the enemy if needed.
+	return this->enemieSprite.getGlobalBounds();
+}
+
+bool enemie::death()
+{
+	return this->deathE;
 }
 
 int enemie::getHeah()

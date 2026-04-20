@@ -38,6 +38,7 @@ private:
 public:
 	game();
 	void checkPattack();
+	void checkEAttack();
 	bool isRunnig();
 	void getEvet();
 
@@ -46,7 +47,6 @@ public:
 	void render();
 
 };
-
 
 
 

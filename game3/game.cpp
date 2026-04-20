@@ -43,9 +43,14 @@ void game::initEnemies()
 	this->enemies.push_back(e1);
 
 	enemie e2;
-	e2.setposition((float)this->win.getSize().x - 100, (float)this->win.getSize().y - 190);
+	e2.setposition((float)this->win.getSize().x - 400, (float)this->win.getSize().y - 190);
 	e2.getSprite().scale(1.5f, 1.5f);
 	this->enemies.push_back(e2);
+
+	enemie e3;
+	e3.setposition((float)this->win.getSize().x - 200, (float)this->win.getSize().y - 190);
+	e3.getSprite().scale(1.5f, 1.5f);
+	this->enemies.push_back(e3);
 }
 
 game::game()
@@ -56,7 +61,6 @@ game::game()
 	this->P.setPosition(100.f, (float)this->win.getSize().y - 280);
 	this->P.setGround((float)this->win.getSize().y - 280);
 	this->P.getSrite().scale(2.f, 2.f);
-	FloatRect a = this->P.getHitBox();
 	this->initEnemies();
 }
 
@@ -76,8 +80,29 @@ void game::checkPattack()
 			}
 		}
 	}
-		
 }
+
+void game::checkEAttack()
+{
+	for (int i = 0; i < this->enemies.size(); i++)
+	{
+		FloatRect enemieHitBox = this->enemies[i].getHitBox();
+
+		if (enemieHitBox.intersects(this->P.getSrite().getGlobalBounds()) )  
+		{
+			if (this->enemies[i].isAttaking())
+			{
+				this->P.takeDamage(10);
+				std::cout << "the player got damaged";
+			}
+			
+		}
+	}
+	
+
+}
+
+
 
 bool game::isRunnig()
 {
@@ -98,10 +123,15 @@ void game::update()
 {
 	this->getEvet();
 	this->checkPattack();
+	this->checkEAttack();
 	this->P.update();
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		this->enemies[i].update(this->P.getPosition().x);
+		if (this->enemies[i].death())
+		{
+			this->enemies.erase(this->enemies.begin() + i);
+		}
 	}
 }
 
