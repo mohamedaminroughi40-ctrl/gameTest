@@ -67,11 +67,6 @@ void enemie::stateHundling(float playerPosX)
 		{
 			this->state = attack;
 		}
-		else if (distance < 120)  // Match or slightly larger than stopDistance
-		{
-			
-			this->state = Eidle;
-		}
 		else if (playerPosX < this->enemieSprite.getPosition().x)
 		{
 			this->state = Echase;
@@ -247,6 +242,30 @@ int enemie::getHeah()
 {
 	return this->hp;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
