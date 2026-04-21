@@ -38,7 +38,7 @@ class player
 		state playerState;
 		state playerLastState;
 		bool stateChanged;
-		void initPlayer();
+		virtual void initPlayer();
 
 
 	//jump logic
@@ -105,6 +105,8 @@ public:
 	bool isAttakFrame();
 	bool getAttakeDealt() const { return this->attakeDealt; }  // Add getter instead
 	void setAttakeDealt(bool dealt) { this->attakeDealt = dealt; }  // Add setter
+
+	
 };
 
 

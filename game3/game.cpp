@@ -53,6 +53,12 @@ void game::initEnemies()
 	this->enemies.push_back(e3);
 }
 
+void game::iniBoss() 
+{
+	this->Mbooss.setposition(1000.f, (float)this->win.getSize().y - 250) ;
+	this->Mbooss.getSprite().scale(2.f, 2.f);
+}
+
 game::game()
 {
 	this->initWin();
@@ -62,11 +68,14 @@ game::game()
 	this->P.setGround((float)this->win.getSize().y - 280);
 	this->P.getSrite().scale(2.f, 2.f);
 	this->initEnemies();
+	this->iniBoss();
 }
 
 void game::checkPattack()
 {
 	FloatRect playerHitBox = this->P.getHitBox();
+
+	// Check attacks on regular enemies
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		if (playerHitBox.intersects(this->enemies[i].getSprite().getGlobalBounds()))
@@ -76,11 +85,24 @@ void game::checkPattack()
 				this->enemies[i].takeDamage(10);
 				this->P.setAttakeDealt(true);
 				std::cout << "the player attake \n";
-				std::cout << "the enemy " <<i <<" heath is " << this->enemies[i].getHeah() << std::endl;
+				std::cout << "the enemy " << i << " heath is " << this->enemies[i].getHeah() << std::endl;
 			}
 		}
 	}
+
+	// Check attacks on BOSS
+	if (playerHitBox.intersects(this->Mbooss.getSprite().getGlobalBounds()))
+	{
+		if (this->P.isAttakFrame() && !this->P.getAttakeDealt())
+		{
+			this->Mbooss.takeDamage(10);
+			this->P.setAttakeDealt(true);
+			std::cout << "Player attacked the BOSS!\n";
+			std::cout << "Boss health is " << this->Mbooss.getHeah() << std::endl;
+		}
+	}
 }
+
 
 void game::checkEAttack()
 {
@@ -102,6 +124,22 @@ void game::checkEAttack()
 	
 
 }
+
+void game::checkBAttack()
+{
+		FloatRect BossHitBox = this->Mbooss.getHitBox();
+
+		if (BossHitBox.intersects(this->P.getSrite().getGlobalBounds()))
+		{
+			if (this->Mbooss.isAttaking() && !this->Mbooss.getAttackDealt() && this->Mbooss.getAttackFarme())
+			{
+				this->Mbooss.setAttackDealt(true);
+				this->P.takeDamage(10);
+				std::cout << "the boss attack the player got damaged";
+			}
+		}
+}
+
 
 
 
@@ -126,6 +164,7 @@ void game::update()
 	this->checkPattack();
 	this->checkEAttack();
 	this->P.update();
+	this->Mbooss.update(this->P.getPosition().x);
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		this->enemies[i].update(this->P.getPosition().x);
@@ -166,6 +205,7 @@ void game::render()
 	//	box.setOutlineThickness(1.f);
 	//	this->win.draw(box);
 	//}
+	this->win.draw(this->Mbooss.getSprite());
 	for (int i = 0; i < this->enemies.size(); i++)
 	{
 		this->win.draw(this->enemies[i].getSprite());

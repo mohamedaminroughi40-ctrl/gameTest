@@ -119,7 +119,7 @@ void player::updateState()
 		this->playerState = run;
 		this->maxFrame = 5;
 	}
-	 if (Keyboard::isKeyPressed(Keyboard::A))
+	 if (Keyboard::isKeyPressed(Keyboard::A))  
 	{
 		this->playerState = runB;
 		this->maxFrame = 5;

@@ -133,12 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="boss.cpp" />
     <ClCompile Include="enemie.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game3.cpp" />
     <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="boss.h" />
     <ClInclude Include="enemie.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="player.h" />

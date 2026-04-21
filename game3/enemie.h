@@ -10,14 +10,17 @@ using namespace sf;
 
 
 
-enum stateMov
-{ 
-	Eidle,Echase,EshaseB,dead,attack
-};
 
 class enemie
 {	
-	private:
+	
+
+	protected:
+		enum stateMov
+		{
+			Eidle, Echase, EshaseB, dead, attack
+		};
+
 		stateMov state;
 		Texture idleTex;
 		Texture apearTex;
@@ -26,7 +29,7 @@ class enemie
 		Texture vanishTex;
 		Texture attackTex;
 		Sprite enemieSprite;
-		void initEnemie();
+		virtual void initEnemie();
 
 		//heath sys
 		int hp;
@@ -55,7 +58,7 @@ class enemie
 		void animation();
 		void stateHundling(float playerPosX);
 		void movUp(float playerPosX);
-		void spriteUp();
+		virtual void spriteUp();
 		void update(float playerPosX);
 
 		void takeDamage(int damage);

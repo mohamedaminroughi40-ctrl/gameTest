@@ -6,6 +6,7 @@
 #include <vector>
 #include"player.h"
 #include"enemie.h"
+#include"boss.h"
 #include<SFML/Graphics.hpp>
 #include<SFML/System.hpp>
 #include<SFML/Window.hpp>
@@ -31,14 +32,17 @@ private:
 
 	//game objects 
 		player P;
+		boss Mbooss;
 		std::vector<enemie> enemies;
 		void initEnemies();
+		void iniBoss();
 
 
 public:
 	game();
 	void checkPattack();
 	void checkEAttack();
+	void checkBAttack();
 	bool isRunnig();
 	void getEvet();
 
